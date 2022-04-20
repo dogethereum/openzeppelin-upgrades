@@ -22,3 +22,34 @@ test('happy path', async t => {
   const version3 = await greeter3.version();
   t.is(version3, 'V3');
 });
+
+test('happy path with specified fees', async t => {
+  const { Greeter } = t.context;
+  const maxFeePerGas = 42000000000;
+  const maxPriorityFeePerGas = 21000000000;
+
+  const greeter = await upgrades.deployProxy(Greeter, ['Hello, Hardhat!'], {
+    kind: 'transparent',
+    maxFeePerGas,
+    maxPriorityFeePerGas,
+  });
+
+  t.is(greeter.deployTransaction.maxFeePerGas.toNumber(), maxFeePerGas);
+  t.is(greeter.deployTransaction.maxPriorityFeePerGas.toNumber(), maxPriorityFeePerGas);
+});
+
+test('happy path with specified proxy gas limit', async t => {
+  const { Greeter } = t.context;
+  const gasLimit = 1700000;
+
+  const greeter = await upgrades.deployProxy(Greeter, ['Hello, Hardhat!'], {
+    kind: 'transparent',
+    transparentProxy: {
+      gasLimit,
+    },
+  });
+
+  t.is(greeter.deployTransaction.gasLimit.toNumber(), gasLimit);
+});
+
+test.todo('happy path with specified implementation gas limit');

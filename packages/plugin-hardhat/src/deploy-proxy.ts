@@ -1,5 +1,5 @@
 import type { HardhatRuntimeEnvironment } from 'hardhat/types';
-import type { ContractFactory, Contract } from 'ethers';
+import type { ContractFactory, Contract, UnsignedTransaction } from 'ethers';
 
 import {
   Manifest,
@@ -40,10 +40,12 @@ export function makeDeployProxy(hre: HardhatRuntimeEnvironment): DeployFunction 
     const manifest = await Manifest.forNetwork(provider);
 
     const { impl, kind } = await deployProxyImpl(hre, ImplFactory, opts);
+    // This allows us to discriminate the union type of `opts`.
+    opts.kind = kind;
     const contractInterface = ImplFactory.interface;
     const data = getInitializerData(contractInterface, args, opts.initializer);
 
-    if (kind === 'uups') {
+    if (opts.kind === 'uups') {
       if (await manifest.getAdmin()) {
         logWarning(`A proxy admin was previously deployed on this network`, [
           `This is not natively used with the current kind of proxy ('uups').`,
@@ -53,7 +55,7 @@ export function makeDeployProxy(hre: HardhatRuntimeEnvironment): DeployFunction 
     }
 
     let proxyDeployment: Required<ProxyDeployment & DeployTransaction>;
-    switch (kind) {
+    switch (opts.kind) {
       case 'beacon': {
         throw new BeaconProxyUnsupportedError();
       }
@@ -68,9 +70,14 @@ export function makeDeployProxy(hre: HardhatRuntimeEnvironment): DeployFunction 
         const AdminFactory = await getProxyAdminFactory(hre, ImplFactory.signer);
         const adminAddress = await fetchOrDeployAdmin(provider, () => deploy(AdminFactory), opts);
         const TransparentUpgradeableProxyFactory = await getTransparentUpgradeableProxyFactory(hre, ImplFactory.signer);
+        const transparentProxyTxOverrides: UnsignedTransaction = {
+          gasLimit: opts?.transparentProxy?.gasLimit,
+          maxFeePerGas: opts?.maxFeePerGas,
+          maxPriorityFeePerGas: opts?.maxPriorityFeePerGas,
+        };
         proxyDeployment = Object.assign(
           { kind },
-          await deploy(TransparentUpgradeableProxyFactory, impl, adminAddress, data),
+          await deploy(TransparentUpgradeableProxyFactory, impl, adminAddress, data, transparentProxyTxOverrides),
         );
         break;
       }

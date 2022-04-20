@@ -16,7 +16,7 @@ import {
   ValidationOptions,
   Version,
 } from '@openzeppelin/upgrades-core';
-import type { ContractFactory } from 'ethers';
+import type { ContractFactory, UnsignedTransaction } from 'ethers';
 import { FormatTypes } from 'ethers/lib/utils';
 import type { EthereumProvider, HardhatRuntimeEnvironment } from 'hardhat/types';
 import { deploy } from './deploy';
@@ -111,12 +111,20 @@ async function deployImpl(
     }
   }
 
+  const txOverrides: UnsignedTransaction = {
+    gasLimit: opts?.implementationGasLimit,
+    maxFeePerGas: opts?.maxFeePerGas,
+    maxPriorityFeePerGas: opts?.maxPriorityFeePerGas,
+  };
   const impl = await fetchOrDeploy(
     deployData.version,
     deployData.provider,
     async () => {
       const abi = ImplFactory.interface.format(FormatTypes.minimal) as string[];
-      const deployment = Object.assign({ abi }, await deploy(ImplFactory, ...deployData.fullOpts.constructorArgs));
+      const deployment = Object.assign(
+        { abi },
+        await deploy(ImplFactory, ...deployData.fullOpts.constructorArgs, txOverrides),
+      );
       return { ...deployment, layout };
     },
     opts,
