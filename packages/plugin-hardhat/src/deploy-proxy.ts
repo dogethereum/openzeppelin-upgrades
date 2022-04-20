@@ -1,20 +1,13 @@
 import type { HardhatRuntimeEnvironment } from 'hardhat/types';
 import type { ContractFactory, Contract, UnsignedTransaction } from 'ethers';
 
-import {
-  Manifest,
-  fetchOrDeployAdmin,
-  logWarning,
-  ProxyDeployment,
-  BeaconProxyUnsupportedError,
-} from '@openzeppelin/upgrades-core';
+import { Manifest, logWarning, ProxyDeployment, BeaconProxyUnsupportedError } from '@openzeppelin/upgrades-core';
 
 import {
   DeployProxyOptions,
   deploy,
   getProxyFactory,
   getTransparentUpgradeableProxyFactory,
-  getProxyAdminFactory,
   DeployTransaction,
   deployProxyImpl,
   getInitializerData,
@@ -67,8 +60,7 @@ export function makeDeployProxy(hre: HardhatRuntimeEnvironment): DeployFunction 
       }
 
       case 'transparent': {
-        const AdminFactory = await getProxyAdminFactory(hre, ImplFactory.signer);
-        const adminAddress = await fetchOrDeployAdmin(provider, () => deploy(AdminFactory), opts);
+        const adminAddress = opts.proxyAdmin || (await ImplFactory.signer.getAddress());
         const TransparentUpgradeableProxyFactory = await getTransparentUpgradeableProxyFactory(hre, ImplFactory.signer);
         const transparentProxyTxOverrides: UnsignedTransaction = {
           gasLimit: opts?.transparentProxy?.gasLimit,

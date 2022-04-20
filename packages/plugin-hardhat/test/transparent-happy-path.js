@@ -53,3 +53,16 @@ test('happy path with specified proxy gas limit', async t => {
 });
 
 test.todo('happy path with specified implementation gas limit');
+
+test('happy path with EOA proxy admin', async t => {
+  const { Greeter } = t.context;
+  const signers = await ethers.getSigners();
+  const proxyAdmin = signers[3].address;
+
+  const greeter = await upgrades.deployProxy(Greeter, ['Hello, Hardhat!'], {
+    kind: 'transparent',
+    proxyAdmin,
+  });
+
+  t.is(await upgrades.erc1967.getAdminAddress(greeter.address), proxyAdmin);
+});

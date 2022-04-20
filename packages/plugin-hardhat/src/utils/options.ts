@@ -25,6 +25,10 @@ interface TransparentOptions {
   transparentProxy?: {
     gasLimit?: ethers.BigNumberish;
   };
+  /**
+   * Address of the EOA proxy admin once deployed.
+   */
+  proxyAdmin?: string;
 }
 
 interface UupsOptions {
