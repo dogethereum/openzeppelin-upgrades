@@ -1,4 +1,4 @@
-require('@openzeppelin/hardhat-upgrades');
+require('@scnale/hardhat-upgrades');
 
 module.exports = {
   solidity: {

@@ -1,8 +1,8 @@
 {
-  "name": "@openzeppelin/hardhat-upgrades",
+  "name": "@scnale/hardhat-upgrades",
   "version": "1.17.0",
   "description": "",
-  "repository": "https://github.com/OpenZeppelin/openzeppelin-upgrades/tree/master/packages/plugin-hardhat",
+  "repository": "https://github.com/scnale/openzeppelin-upgrades/tree/master/packages/plugin-hardhat",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [

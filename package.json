@@ -29,9 +29,8 @@
   },
   "workspaces": {
     "packages": [
-      "packages/*",
-      "packages/plugin-truffle/test",
-      "examples/*"
+      "packages/plugin-hardhat",
+      "packages/core"
     ]
   }
 }
