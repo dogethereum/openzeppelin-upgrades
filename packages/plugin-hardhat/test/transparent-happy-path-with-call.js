@@ -5,12 +5,13 @@ const { ethers, upgrades } = require('hardhat');
 test.before(async t => {
   t.context.Greeter = await ethers.getContractFactory('Greeter');
   t.context.GreeterV2 = await ethers.getContractFactory('GreeterV2');
+  t.context.user = await ethers.getSigner(2);
 });
 
 test('happy path - call with args', async t => {
-  const { Greeter, GreeterV2 } = t.context;
+  const { Greeter, GreeterV2, user } = t.context;
 
-  const greeter = await upgrades.deployProxy(Greeter, ['Hello, Hardhat!'], { kind: 'transparent' });
+  const greeter = (await upgrades.deployProxy(Greeter, ['Hello, Hardhat!'], { kind: 'transparent' })).connect(user);
 
   t.is(await greeter.greet(), 'Hello, Hardhat!');
 
@@ -22,9 +23,9 @@ test('happy path - call with args', async t => {
 });
 
 test('happy path - call without args', async t => {
-  const { Greeter, GreeterV2 } = t.context;
+  const { Greeter, GreeterV2, user } = t.context;
 
-  const greeter = await upgrades.deployProxy(Greeter, ['Hello, Hardhat!'], { kind: 'transparent' });
+  const greeter = (await upgrades.deployProxy(Greeter, ['Hello, Hardhat!'], { kind: 'transparent' })).connect(user);
 
   t.is(await greeter.greet(), 'Hello, Hardhat!');
 

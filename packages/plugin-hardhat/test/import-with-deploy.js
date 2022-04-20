@@ -136,7 +136,9 @@ test('import then deploy transparent with same admin', async t => {
   await proxy.deployed();
 
   const greeter = await upgrades.forceImport(proxy.address, Greeter);
-  const greeter2 = await upgrades.deployProxy(Greeter, ['Hello, Hardhat 2!']);
+  const greeter2 = await upgrades.deployProxy(Greeter, ['Hello, Hardhat 2!'], {
+    proxyAdmin: admin.address,
+  });
   await greeter2.deployed();
 
   t.is(

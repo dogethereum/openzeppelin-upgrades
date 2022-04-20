@@ -6,7 +6,8 @@ test.before(async t => {
   t.context.Greeter = await ethers.getContractFactory('Greeter');
 });
 
-test('admin.getInstance', async t => {
+// Obsolete test
+test.skip('admin.getInstance', async t => {
   const { Greeter } = t.context;
   const greeter = await upgrades.deployProxy(Greeter, ['Hola admin!'], { kind: 'transparent' });
   const adminInstance = await upgrades.admin.getInstance();

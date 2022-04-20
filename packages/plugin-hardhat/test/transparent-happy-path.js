@@ -6,14 +6,15 @@ test.before(async t => {
   t.context.Greeter = await ethers.getContractFactory('Greeter');
   t.context.GreeterV2 = await ethers.getContractFactory('GreeterV2');
   t.context.GreeterV3 = await ethers.getContractFactory('GreeterV3');
+  t.context.user = await ethers.getSigner(2);
 });
 
 test('happy path', async t => {
-  const { Greeter, GreeterV2, GreeterV3 } = t.context;
+  const { Greeter, GreeterV2, GreeterV3, user } = t.context;
 
   const greeter = await upgrades.deployProxy(Greeter, ['Hello, Hardhat!'], { kind: 'transparent' });
 
-  const greeter2 = await upgrades.upgradeProxy(greeter, GreeterV2);
+  const greeter2 = (await upgrades.upgradeProxy(greeter, GreeterV2)).connect(user);
   await greeter2.deployed();
   await greeter2.resetGreeting();
 

@@ -9,7 +9,8 @@ test.before(async t => {
   t.context.Greeter = await ethers.getContractFactory('Greeter');
 });
 
-test('transferProxyAdminOwnership', async t => {
+// This test is obsolete due to no ProxyAdmin contracts ever being deployed now
+test.skip('transferProxyAdminOwnership', async t => {
   // we need to deploy a proxy so we have a Proxy Admin
   const { Greeter } = t.context;
   await upgrades.deployProxy(Greeter, ['Hello, Hardhat!'], { kind: 'transparent' });

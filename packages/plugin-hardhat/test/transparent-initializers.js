@@ -5,6 +5,7 @@ const { ethers, upgrades } = require('hardhat');
 test.before(async t => {
   t.context.InitializerOverloaded = await ethers.getContractFactory('InitializerOverloaded');
   t.context.InitializerMissing = await ethers.getContractFactory('InitializerMissing');
+  t.context.user = await ethers.getSigner(2);
 });
 
 test('multiple matching functions', async t => {
@@ -17,12 +18,12 @@ test('multiple matching functions', async t => {
 });
 
 test('unique function selector', async t => {
-  const { InitializerOverloaded } = t.context;
+  const { InitializerOverloaded, user } = t.context;
   const instance = await upgrades.deployProxy(InitializerOverloaded, [42], {
     kind: 'transparent',
     initializer: 'initialize(uint256)',
   });
-  t.is((await instance.x()).toString(), '42');
+  t.is((await instance.connect(user).x()).toString(), '42');
 });
 
 test('no initialize function and no args', async t => {

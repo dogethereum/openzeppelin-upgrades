@@ -9,7 +9,8 @@ test.before(async t => {
   t.context.Greeter = await ethers.getContractFactory('Greeter');
 });
 
-test('changeProxyAdmin', async t => {
+// Needs using a ProxyAdmin with the proxy.
+test.skip('changeProxyAdmin', async t => {
   const { Greeter } = t.context;
   const greeter = await upgrades.deployProxy(Greeter, ['Hello, Hardhat!'], { kind: 'transparent' });
   await upgrades.admin.changeProxyAdmin(greeter.address, testAddress);
