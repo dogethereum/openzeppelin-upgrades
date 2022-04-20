@@ -61,7 +61,8 @@ export function makeDeployProxy(hre: HardhatRuntimeEnvironment): DeployFunction 
 
       case 'transparent': {
         const adminAddress = opts.proxyAdmin || (await ImplFactory.signer.getAddress());
-        const TransparentUpgradeableProxyFactory = await getTransparentUpgradeableProxyFactory(hre, ImplFactory.signer);
+        const TransparentUpgradeableProxyFactory =
+          opts?.transparentProxy?.factory ?? (await getTransparentUpgradeableProxyFactory(hre, ImplFactory.signer));
         const transparentProxyTxOverrides: UnsignedTransaction = {
           gasLimit: opts?.transparentProxy?.gasLimit,
           maxFeePerGas: opts?.maxFeePerGas,

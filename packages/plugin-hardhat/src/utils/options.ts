@@ -24,6 +24,7 @@ interface TransparentOptions {
   kind: 'transparent';
   transparentProxy?: {
     gasLimit?: ethers.BigNumberish;
+    factory?: ethers.ContractFactory;
   };
   /**
    * Address of the EOA proxy admin once deployed.
