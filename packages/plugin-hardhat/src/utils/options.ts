@@ -1,12 +1,17 @@
 import { DeployOpts, ValidationOptions, withValidationDefaults } from '@openzeppelin/upgrades-core';
 import type ethers from 'ethers';
 
-export type Options = ValidationOptions &
+export type OptionsWithDefaults = ValidationOptions &
   DeployOpts & {
     constructorArgs?: unknown[];
   };
+export type Options = OptionsWithDefaults & {
+  maxFeePerGas?: ethers.BigNumberish;
+  maxPriorityFeePerGas?: ethers.BigNumberish;
+  implementationGasLimit?: ethers.BigNumberish;
+};
 
-export function withDefaults(opts: Options = {}): Required<Options> {
+export function withDefaults(opts: Options = {}): Required<OptionsWithDefaults> {
   return {
     constructorArgs: opts.constructorArgs ?? [],
     timeout: opts.timeout ?? 60e3,
@@ -42,15 +47,9 @@ interface BeaconOptions {
 
 interface DeployProxyOptionsGeneric extends Options {
   initializer?: string | false;
-  maxFeePerGas?: ethers.BigNumberish;
-  maxPriorityFeePerGas?: ethers.BigNumberish;
-  implementationGasLimit?: ethers.BigNumberish;
 }
 
 export interface UpgradeProxyOptions extends Options {
   call?: { fn: string; args?: unknown[] } | string;
   unsafeSkipStorageCheck?: boolean;
-  maxFeePerGas?: ethers.BigNumberish;
-  maxPriorityFeePerGas?: ethers.BigNumberish;
-  implementationGasLimit?: ethers.BigNumberish;
 }

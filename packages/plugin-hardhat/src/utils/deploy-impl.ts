@@ -20,7 +20,7 @@ import type { ContractFactory, UnsignedTransaction } from 'ethers';
 import { FormatTypes } from 'ethers/lib/utils';
 import type { EthereumProvider, HardhatRuntimeEnvironment } from 'hardhat/types';
 import { deploy } from './deploy';
-import { Options, UpgradeProxyOptions, withDefaults } from './options';
+import { Options, OptionsWithDefaults, UpgradeProxyOptions, withDefaults } from './options';
 import { readValidations } from './validations';
 
 interface DeployedProxyImpl {
@@ -39,7 +39,7 @@ export interface DeployData {
   encodedArgs: string;
   version: Version;
   layout: StorageLayout;
-  fullOpts: Required<Options>;
+  fullOpts: Required<OptionsWithDefaults>;
 }
 
 export async function getDeployData(
