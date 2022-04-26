@@ -1,4 +1,4 @@
-require('@scnale/hardhat-upgrades');
+require('@dogethereum/hardhat-upgrades');
 
 module.exports = {
   solidity: {

@@ -1,5 +1,5 @@
 {
-  "name": "@scnale/hardhat-upgrades",
+  "name": "@dogethereum/hardhat-upgrades",
   "version": "1.17.1",
   "description": "",
   "repository": "https://github.com/scnale/openzeppelin-upgrades/tree/master/packages/plugin-hardhat",
