@@ -1,8 +1,8 @@
 {
   "name": "@dogethereum/hardhat-upgrades",
-  "version": "1.17.1",
+  "version": "1.17.2",
   "description": "",
-  "repository": "https://github.com/scnale/openzeppelin-upgrades/tree/master/packages/plugin-hardhat",
+  "repository": "https://github.com/dogethereum/openzeppelin-upgrades/tree/master/packages/plugin-hardhat",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
